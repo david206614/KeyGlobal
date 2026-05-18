@@ -7,6 +7,7 @@ import { Footer } from './components/layout/Footer';
 import { WhatsAppButton } from './components/layout/WhatsAppButton';
 import { HomePage } from './components/home/HomePage';
 import { CatalogPage } from './components/catalog/CatalogPage';
+import { NosotrosPage } from './components/pages/NosotrosPage';
 import { ProductModal } from './components/ui/ProductModal';
 import { categories } from './data/categories';
 
@@ -29,6 +30,8 @@ function AppContent() {
       <main className="flex-1">
         {view === 'home' ? (
           <HomePage onNavigate={navigate} onOpenProduct={handleOpenProduct} />
+        ) : view === 'nosotros' ? (
+          <NosotrosPage />
         ) : (
           <CatalogPage categories={categories} onOpenProduct={handleOpenProduct} />
         )}

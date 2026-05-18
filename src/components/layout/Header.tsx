@@ -52,6 +52,16 @@ export function Header({ currentView, onNavigate }: HeaderProps) {
           >
             Catálogo
           </button>
+          <button
+            onClick={() => handleNav('nosotros')}
+            className={`text-sm font-medium transition-colors ${
+              currentView === 'nosotros'
+                ? 'text-brand border-b-2 border-brand'
+                : 'text-gray-600 hover:text-brand'
+            }`}
+          >
+            Nosotros
+          </button>
         </nav>
 
         {/* Mobile hamburger */}
@@ -97,6 +107,14 @@ export function Header({ currentView, onNavigate }: HeaderProps) {
             }`}
           >
             Catálogo
+          </button>
+          <button
+            onClick={() => handleNav('nosotros')}
+            className={`text-left text-sm font-medium py-2 transition-colors ${
+              currentView === 'nosotros' ? 'text-brand' : 'text-gray-600 hover:text-brand'
+            }`}
+          >
+            Nosotros
           </button>
         </nav>
       )}

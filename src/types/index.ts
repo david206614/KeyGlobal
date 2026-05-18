@@ -1,4 +1,4 @@
-export type View = 'home' | 'catalog';
+export type View = 'home' | 'catalog' | 'nosotros';
 
 export interface Category {
   id: string;
