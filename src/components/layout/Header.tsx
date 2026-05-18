@@ -16,7 +16,7 @@ export function Header({ currentView, onNavigate }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-gray-100">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 py-3 sm:py-3 md:py-4 flex items-center justify-between">
         {/* Logo */}
         <button
           onClick={() => handleNav('home')}
@@ -25,7 +25,8 @@ export function Header({ currentView, onNavigate }: HeaderProps) {
           <img
             src="/images/Logo%20key%20global.png"
             alt="KeyGlobal"
-            className="h-8 sm:h-10 w-auto"
+            className="h-11 sm:h-12 md:h-16 lg:h-20 w-auto object-contain transition-all duration-300"
+            style={{ imageRendering: '-webkit-optimize-contrast' }}
           />
         </button>
 
