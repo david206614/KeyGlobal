@@ -23,6 +23,8 @@ export function Footer() {
             {/* Email */}
             <a
               href="mailto:keyglobalgroupsas@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm hover:text-[#C1304D] transition-colors"
             >
               <Mail className="w-4 h-4" />
