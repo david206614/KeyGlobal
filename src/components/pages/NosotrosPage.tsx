@@ -15,9 +15,9 @@ export function NosotrosPage() {
 
       {/* Nuestra Historia */}
       <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
-        <div className="flex items-start gap-4">
-          <div className="flex-shrink-0 w-12 h-12 bg-brand-subtle rounded-xl flex items-center justify-center">
-            <Building2 className="w-6 h-6 text-brand" />
+        <div className="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-6">
+          <div className="flex-shrink-0 w-16 h-16 bg-brand-subtle rounded-full flex items-center justify-center md:w-12 md:h-12 md:rounded-xl">
+            <Building2 className="w-8 h-8 text-brand md:w-6 md:h-6" />
           </div>
           <div>
             <h2 className="font-display text-2xl md:text-3xl font-light text-gray-900 mb-4">
