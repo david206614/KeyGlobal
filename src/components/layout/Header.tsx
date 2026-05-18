@@ -20,9 +20,13 @@ export function Header({ currentView, onNavigate }: HeaderProps) {
         {/* Logo */}
         <button
           onClick={() => handleNav('home')}
-          className="font-display text-xl text-brand font-light tracking-wide hover:text-brand-dark transition-colors"
+          className="flex items-center"
         >
-          KeyGlobal
+          <img
+            src="/images/Logo%20key%20global.png"
+            alt="KeyGlobal"
+            className="h-8 sm:h-10 w-auto"
+          />
         </button>
 
         {/* Desktop nav */}
