@@ -14,6 +14,9 @@ export interface Product {
   images: string[];
   description?: string;
   materials?: string;
+  dimensions?: string;
+  printArea?: string;
+  moq?: number;
   techniques?: string;
 }
 

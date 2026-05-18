@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { Product } from '../../types';
-import { getWhatsAppLink } from '../../lib/whatsapp';
+import { buildQuoteMessage } from '../../lib/whatsapp';
 import { svgPlaceholder } from '../../lib/placeholders';
 
 interface ProductModalProps {
@@ -9,11 +9,17 @@ interface ProductModalProps {
   onClose: () => void;
 }
 
+type TabType = 'description' | 'specs';
+
 export function ProductModal({ product, onClose }: ProductModalProps) {
   const galleryRef = useRef<HTMLDivElement>(null);
   const [activeImage, setActiveImage] = useState(0);
-
-  const waLink = getWhatsAppLink(product.category, product.title);
+  const [activeTab, setActiveTab] = useState<TabType>('description');
+  
+  // Quote form state
+  const [quantity, setQuantity] = useState('');
+  const [variants, setVariants] = useState('');
+  const [specialRequirements, setSpecialRequirements] = useState('');
 
   // Scroll lock
   useEffect(() => {
@@ -55,6 +61,23 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
     if (e.target === e.currentTarget) onClose();
   };
 
+  // MOQ validation
+  const qty = parseInt(quantity);
+  const moq = product.moq || 0;
+  const isQtyInvalid = quantity && qty < moq;
+  const isFormValid = quantity && qty >= moq && qty > 0;
+
+  const handleQuoteSubmit = () => {
+    if (!isFormValid) return;
+    const url = buildQuoteMessage(
+      product.title,
+      qty,
+      variants,
+      specialRequirements
+    );
+    window.open(url, '_blank');
+  };
+
   return createPortal(
     <div
       className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center"
@@ -92,7 +115,6 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
                     className="w-full h-full object-cover"
                     loading={i === 0 ? 'eager' : 'lazy'}
                     onError={(e) => {
-                      // Show placeholder on error
                       (e.target as HTMLImageElement).src = svgPlaceholder(600, 600, '#E8D5D9');
                     }}
                   />
@@ -119,7 +141,6 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
             )}
           </>
         ) : (
-          /* No images fallback */
           <div className="aspect-square bg-[#E8D5D9] flex items-center justify-center">
             <img
               src={svgPlaceholder(600, 600, '#E8D5D9')}
@@ -138,32 +159,144 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
             {product.title}
           </h2>
 
-          {product.description && (
-            <p className="text-gray-600 mt-3 text-sm leading-relaxed">{product.description}</p>
-          )}
+          {/* Tabs */}
+          <div className="flex border-b border-gray-200 mt-4">
+            <button
+              onClick={() => setActiveTab('description')}
+              className={`py-2 px-4 text-sm font-medium transition-colors border-b-2 cursor-pointer ${
+                activeTab === 'description'
+                  ? 'border-brand text-brand'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Descripción
+            </button>
+            <button
+              onClick={() => setActiveTab('specs')}
+              className={`py-2 px-4 text-sm font-medium transition-colors border-b-2 cursor-pointer ${
+                activeTab === 'specs'
+                  ? 'border-brand text-brand'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Ficha Técnica
+            </button>
+          </div>
 
-          <div className="mt-4 space-y-2 text-sm">
-            {product.materials && (
-              <p className="text-gray-700">
-                <span className="font-medium">Materiales:</span> {product.materials}
-              </p>
-            )}
-            {product.techniques && (
-              <p className="text-gray-700">
-                <span className="font-medium">Técnicas:</span> {product.techniques}
-              </p>
+          {/* Tab Content */}
+          <div className="mt-4">
+            {activeTab === 'description' ? (
+              <div>
+                {product.description && (
+                  <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
+                )}
+                {!product.description && (
+                  <p className="text-gray-400 text-sm">Sin descripción disponible.</p>
+                )}
+              </div>
+            ) : (
+              <div>
+                {product.materials || product.dimensions || product.printArea ? (
+                  <div className="space-y-3">
+                    {product.materials && (
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-500">Materiales</span>
+                        <span className="text-sm text-gray-900 text-right">{product.materials}</span>
+                      </div>
+                    )}
+                    {product.dimensions && (
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-500">Dimensiones</span>
+                        <span className="text-sm text-gray-900 text-right">{product.dimensions}</span>
+                      </div>
+                    )}
+                    {product.printArea && (
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-500">Área de Impresión</span>
+                        <span className="text-sm text-gray-900 text-right">{product.printArea}</span>
+                      </div>
+                    )}
+                    {product.moq && (
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-500">Cantidad Mínima</span>
+                        <span className="text-sm text-gray-900 font-medium">{product.moq} unidades</span>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-gray-400 text-sm">Información técnica no disponible.</p>
+                )}
+              </div>
             )}
           </div>
 
-          {/* WhatsApp CTA */}
-          <a
-            href={waLink.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 w-full block text-center bg-whatsapp text-white font-medium py-3 rounded-xl hover:bg-whatsapp/90 transition-colors text-sm"
-          >
-            Cotizar por WhatsApp
-          </a>
+          {/* Quote Form */}
+          <div className="mt-6 pt-6 border-t border-gray-100">
+            <h3 className="font-semibold text-gray-900 mb-4">Solicitar Cotización</h3>
+            
+            <div className="space-y-4">
+              {/* Quantity */}
+              <div>
+                <label className="block text-sm text-gray-700 mb-1">
+                  Cantidad {product.moq && <span className="text-gray-400">(Mín: {product.moq})</span>}
+                </label>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 ${
+                    isQtyInvalid
+                      ? 'border-red-500 focus:ring-red-200'
+                      : 'border-gray-300 focus:ring-brand/20'
+                  }`}
+                  placeholder={`Mínimo ${product.moq || 1}`}
+                  min={product.moq || 1}
+                />
+                {isQtyInvalid && (
+                  <p className="text-red-500 text-xs mt-1">
+                    La cantidad mínima de pedido es {moq} unidades
+                  </p>
+                )}
+              </div>
+
+              {/* Variants */}
+              <div>
+                <label className="block text-sm text-gray-700 mb-1">Variantes (color/material)</label>
+                <input
+                  type="text"
+                  value={variants}
+                  onChange={(e) => setVariants(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/20"
+                  placeholder="Ej: Azul, metal dorado"
+                />
+              </div>
+
+              {/* Special Requirements */}
+              <div>
+                <label className="block text-sm text-gray-700 mb-1">Detalles adicionales</label>
+                <textarea
+                  value={specialRequirements}
+                  onChange={(e) => setSpecialRequirements(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/20 resize-none"
+                  rows={2}
+                  placeholder="Otros requerimientos especiales..."
+                />
+              </div>
+
+              {/* Submit Button */}
+              <button
+                onClick={handleQuoteSubmit}
+                disabled={!isFormValid}
+                className={`w-full py-3 rounded-xl font-medium text-sm transition-colors cursor-pointer ${
+                  isFormValid
+                    ? 'bg-whatsapp text-white hover:bg-whatsapp/90'
+                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Cotizar por WhatsApp
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>,

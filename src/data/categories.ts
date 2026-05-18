@@ -2,18 +2,51 @@ import type { Category } from '../types';
 
 export const categories: Category[] = [
   {
-    id: 'indumentaria',
-    name: 'Indumentaria',
-    slug: 'indumentaria',
+    id: 'medalleria',
+    name: 'Medallería',
+    slug: 'medalleria',
+    icon: '🏅',
   },
   {
-    id: 'medallas',
-    name: 'Medallas',
-    slug: 'medallas',
+    id: 'llaveros',
+    name: 'Llaveros',
+    slug: 'llaveros',
+    icon: '🔑',
   },
   {
-    id: 'institucional',
-    name: 'Artículos Institucionales',
-    slug: 'institucional',
+    id: 'indumentaria-deportiva',
+    name: 'Indumentaria Deportiva',
+    slug: 'indumentaria-deportiva',
+    icon: '👕',
+  },
+  {
+    id: 'bolsas-deportivas',
+    name: 'Bolsas Deportivas',
+    slug: 'bolsas-deportivas',
+    icon: '👜',
+  },
+  {
+    id: 'pines',
+    name: 'Pines',
+    slug: 'pines',
+    icon: '📌',
+  },
+  {
+    id: 'termos',
+    name: 'Termos',
+    slug: 'termos',
+    icon: '☕',
+  },
+  {
+    id: 'chip-dorsal',
+    name: 'Chip y Dorsal',
+    slug: 'chip-dorsal',
+    icon: '🏃',
+  },
+  {
+    id: 'monedas-conmemorativas',
+    name: 'Monedas Conmemorativas',
+    slug: 'monedas-conmemorativas',
+    icon: '🪙',
   },
 ];

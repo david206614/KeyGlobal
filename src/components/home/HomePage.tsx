@@ -1,9 +1,8 @@
 import type { Product } from '../../types';
 import type { View } from '../../types';
 import { HeroSection } from './HeroSection';
-import { CategoryCards } from './CategoryCards';
+import { ServicesGrid } from './ServicesGrid';
 import { FeaturedCarousel } from './FeaturedCarousel';
-import { categories } from '../../data/categories';
 import { products } from '../../data/products';
 
 interface HomePageProps {
@@ -18,15 +17,7 @@ export function HomePage({ onNavigate, onOpenProduct }: HomePageProps) {
   return (
     <div>
       <HeroSection onCTAClick={() => onNavigate('catalog')} />
-      <CategoryCards
-        categories={categories}
-        onSelectCategory={(categoryId) => {
-          // Navigate to catalog — the catalog page will handle the filter via URL or state
-          onNavigate('catalog');
-          // Store selected category in sessionStorage for the catalog page to pick up
-          sessionStorage.setItem('selectedCategory', categoryId);
-        }}
-      />
+      <ServicesGrid />
       <FeaturedCarousel
         products={featuredProducts}
         onProductClick={onOpenProduct}

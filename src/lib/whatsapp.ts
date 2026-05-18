@@ -35,3 +35,17 @@ export function getWhatsAppLink(category?: string, productName?: string): { href
     : 'Cotizar por WhatsApp';
   return { href, label };
 }
+
+// Quote form message generator
+export function buildQuoteMessage(
+  productName: string,
+  quantity: number,
+  variants: string,
+  requirements: string
+): string {
+  const message = `Hola KeyGlobal, me interesa cotizar el producto: ${productName}
+Cantidad: ${quantity}
+Especificaciones: ${variants || 'No especificadas'}
+Detalles adicionales: ${requirements || 'Ninguno'}`;
+  return `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
+}
