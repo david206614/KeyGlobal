@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { View } from '../../types';
+import { assetUrl } from '../../lib/assets';
 
 interface HeaderProps {
   currentView: View;
@@ -23,7 +24,7 @@ export function Header({ currentView, onNavigate }: HeaderProps) {
           className="flex items-center"
         >
           <img
-            src="/images/Logo%20key%20global.png"
+            src={assetUrl('/images/Logo%20key%20global.png')}
             alt="KeyGlobal"
             className="h-11 sm:h-12 md:h-16 lg:h-20 w-auto object-contain transition-all duration-300"
             style={{ imageRendering: '-webkit-optimize-contrast' }}

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import type { Product } from '../../types';
 import { buildQuoteMessage } from '../../lib/whatsapp';
 import { svgPlaceholder } from '../../lib/placeholders';
+import { assetUrl } from '../../lib/assets';
 
 interface ProductModalProps {
   product: Product;
@@ -110,7 +111,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
               {images.map((img, i) => (
                 <div key={i} className="snap-center shrink-0 w-full aspect-square bg-[#E8D5D9] overflow-hidden relative">
                   <img
-                    src={img}
+                    src={assetUrl(img)}
                     alt={`${product.title} — imagen ${i + 1}`}
                     className="w-full h-full object-cover"
                     loading={i === 0 ? 'eager' : 'lazy'}

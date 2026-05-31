@@ -1,5 +1,6 @@
 import type { Product } from '../../types';
 import { ImageWithPlaceholder } from '../ui/ImageWithPlaceholder';
+import { assetUrl } from '../../lib/assets';
 
 interface FeaturedCarouselProps {
   products: Product[];
@@ -25,7 +26,7 @@ export function FeaturedCarousel({ products: featured, onProductClick }: Feature
             <div className="aspect-square bg-[#E8D5D9] overflow-hidden relative">
               {product.images.length > 0 ? (
                 <ImageWithPlaceholder
-                  src={product.images[0]}
+                  src={assetUrl(product.images[0])}
                   alt={product.title}
                   className="w-full h-full object-cover"
                 />

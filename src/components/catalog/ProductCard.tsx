@@ -1,6 +1,7 @@
 import type { Product } from '../../types';
 import { getWhatsAppLink } from '../../lib/whatsapp';
 import { ImageWithPlaceholder } from '../ui/ImageWithPlaceholder';
+import { assetUrl } from '../../lib/assets';
 
 interface ProductCardProps {
   product: Product;
@@ -19,7 +20,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
       >
         {product.images.length > 0 ? (
           <ImageWithPlaceholder
-            src={product.images[0]}
+            src={assetUrl(product.images[0])}
             alt={product.title}
             className="w-full h-full object-cover"
           />
